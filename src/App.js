@@ -4,9 +4,10 @@ import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 // Function that will be called to refresh authorization
-const refreshAuthLogic = failedRequest => axios.post('https://www.example.com/auth/token/refresh').then(tokenRefreshResponse => {
+const refreshAuthLogic = failedRequest => axios.post('https://jsonplaceholder.typicode.com/posts').then(tokenRefreshResponse => {
     localStorage.setItem('token', tokenRefreshResponse.data.token);
     failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefreshResponse.data.token;
+    console.log(post,"hello there ")
     return Promise.resolve();
 });
 
@@ -19,20 +20,18 @@ createAuthRefreshInterceptor(axios, refreshAuthLogic);
 export default function App() {
   const [post, setPost] = React.useState(null);
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setPost(response.data);
-    });
-  }, []);
-
-  axios.get('https://jsonplaceholder.typicode.com/posts/1')
+    axios.get('https://jsonplaceholder.typicode.com/posts/1')
     .then((response) => {
-      setPost(response.data)
+      setPost(response)
+      console.log(response.data)
+      console.log(post,'post')
     .catch(error)
-    })
+   });
+  }, []);
   return (
     <div>
-     <h1>{post.title}</h1>
-      <p>{post.body}</p>
+     {/* <h1>{post.title}</h1> */}
+      {/* <p>{post.body}</p> */}
     </div>
   );
 }
